@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/laptop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:paddingLeft="25dp" />
+
+    <ImageView
+        android:id="@+id/btnAddItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/app_name"
+        android:layout_alignTop="@+id/laptop"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnMinus"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/btnAddItem"
+        android:src="@android:drawable/ic_delete" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPlus"
+        android:layout_alignTop="@+id/btnMinus"
+        android:layout_toLeftOf="@+id/btnMinus"
+        android:layout_toStartOf="@+id/btnMinus"
+        android:src="@android:drawable/ic_input_add" />
+
+    <EditText
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/etQuan"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/btnPlus"
+        android:text="1"
+        android:layout_alignBottom="@+id/btnPlus" />
+
+</RelativeLayout>

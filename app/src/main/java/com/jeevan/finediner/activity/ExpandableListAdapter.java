@@ -8,24 +8,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.jeevan.finediner.Item;
 import com.jeevan.finediner.R;
+import com.jeevan.finediner.Session;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Activity context;
     private ArrayList<Item> menuItems;
-
-    public ExpandableListAdapter(Activity context, ArrayList<Item> m) {
+    static ExpandableListAdapter orderadp;
+    public ExpandableListAdapter(Activity context) {
         this.context = context;
-        this.menuItems = m;
+        this.menuItems = Session.instance.arrOrder;
+        orderadp = this;
+    }
+    public ExpandableListAdapter(Activity context, ArrayList<Item> menuItems) {
+        this.context = context;
+        this.menuItems = menuItems;
     }
 
 
@@ -40,32 +44,37 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final String itemDesc=  menuItems.get(groupPosition).desc;
+
+        final Item selected =  menuItems.get(groupPosition);
+        final String itemDesc=  selected.desc;
         LayoutInflater inflater = context.getLayoutInflater();
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.child_item, null);
         }
 
-        TextView item = (TextView) convertView.findViewById(R.id.laptop);
+        TextView item = (TextView) convertView.findViewById(R.id.item_name);
+        final TextView total = (TextView) context.findViewById(R.id.total);
 
-        ImageView delete = (ImageView) convertView.findViewById(R.id.btnAddItem);
+
+        Button delete = (Button) convertView.findViewById(R.id.btnAddItem);
         delete.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-                //
+                Session.instance.addItem(selected);
+                notifyDataSetChanged();
+                orderadp.notifyDataSetChanged();
+                double totall = Double.parseDouble(total.getText().toString());
+                total.setText(String.valueOf(totall + selected.price));
+                /*
                 try {
-                    Socket s = new Socket("10.0.3.2", 3223);
-                    ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
-                    os.writeObject(new Message(1, itemDesc));
-                    os.flush();
-                    os.reset();
+
 
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }
+                }*/
             }
         });
 
@@ -78,7 +87,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public Object getGroup(int groupPosition) {
-          return menuItems.get(groupPosition).name;
+        return menuItems.get(groupPosition).name;
     }
 
     public int getGroupCount() {
@@ -91,16 +100,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        String itemName = menuItems.get(groupPosition).name;
+        Item i = menuItems.get(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.group_item,
                     null);
         }
-        TextView item = (TextView) convertView.findViewById(R.id.laptop);
+        TextView item = (TextView) convertView.findViewById(R.id.item_name);
+        TextView itempr = (TextView) convertView.findViewById(R.id.item_price);
         item.setTypeface(null, Typeface.BOLD);
-        item.setText(itemName);
+        item.setText(i.name);
+        itempr.setText("£"+i.price);
         return convertView;
     }
 

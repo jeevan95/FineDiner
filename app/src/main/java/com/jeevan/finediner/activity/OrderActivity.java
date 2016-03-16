@@ -2,7 +2,6 @@ package com.jeevan.finediner.activity;
 
 import com.jeevan.finediner.R;
 import com.jeevan.finediner.fragments.OneFragment;
-import com.jeevan.finediner.fragments.ThreeFragment;
 import com.jeevan.finediner.fragments.TwoFragment;
 
 import android.os.Bundle;
@@ -23,7 +22,6 @@ public class OrderActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    ArrayList<Item> menuItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +29,6 @@ public class OrderActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        menuItems = (ArrayList<Item>) getIntent().getExtras().get("menuItems");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -43,12 +40,8 @@ public class OrderActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         Fragment of = new OneFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("menuItems",menuItems);
-        of.setArguments(args);
         adapter.addFragment(of, "ONE");
         adapter.addFragment(new TwoFragment(), "TWO");
-        adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.setAdapter(adapter);
     }
 
@@ -80,8 +73,5 @@ public class OrderActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
-
-
-
 
 }

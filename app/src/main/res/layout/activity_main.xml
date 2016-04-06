@@ -21,15 +21,31 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtableno"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp" />
+
+        <Button
+            android:id="@+id/btnConn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connect"
+            android:textSize="15dp"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/btnSimpleTabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_simple_tabs"
-            android:textSize="15dp" />
-
+            android:textSize="15dp"
+            android:layout_weight="0.21" />
 
 
     </LinearLayout>

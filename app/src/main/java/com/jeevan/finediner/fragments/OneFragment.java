@@ -1,7 +1,8 @@
 package com.jeevan.finediner.fragments;
 
 import com.jeevan.finediner.R;
-import com.jeevan.finediner.activity.ExpandableListAdapter;
+import com.jeevan.finediner.activity.MenuListAdapter;
+import com.jeevan.finediner.activity.OrderListAdapter;
 import com.jeevan.finediner.Item;
 import com.jeevan.finediner.Session;
 
@@ -33,7 +34,7 @@ public class OneFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_one, container, false);
         // Inflate the layout for this fragment
         ExpandableListView exl = (ExpandableListView) v.findViewById(R.id.menu_list);
-        exl.setAdapter(new ExpandableListAdapter(getActivity(), Session.menuItems));
+        exl.setAdapter(new MenuListAdapter(getActivity(), Session.getSession().getMenu()));
 
         return v;
     }

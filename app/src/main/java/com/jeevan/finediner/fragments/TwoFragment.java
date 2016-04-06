@@ -1,8 +1,9 @@
 package com.jeevan.finediner.fragments;
 
-import com.jeevan.finediner.Message;
+import com.jeevan.finediner.Item;
+import com.jeevan.finediner.Request;
 import com.jeevan.finediner.R;
-import com.jeevan.finediner.activity.ExpandableListAdapter;
+import com.jeevan.finediner.activity.OrderListAdapter;
 import com.jeevan.finediner.Session;
 
 import android.os.Bundle;
@@ -13,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.util.ArrayList;
 
 public class TwoFragment extends Fragment{
 
@@ -35,26 +34,26 @@ public class TwoFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_two, container, false);
         // Inflate the layout for this fragment
         ExpandableListView exl = (ExpandableListView) v.findViewById(R.id.menu_list);
-        exl.setAdapter(new ExpandableListAdapter(getActivity()));
-        Button bo = (Button) v.findViewById(R.id.btnOrder);
+        exl.setAdapter(new OrderListAdapter(getActivity()));
+        final Button bo = (Button) v.findViewById(R.id.btnOrder);
+
+        if(Session.getSession().getTempOrder().isEmpty()){
+            bo.setEnabled(false);
+        }
+
         bo.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
-                try {
-                    Socket s = new Socket("10.0.3.2", 3223);
-                    ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
-                    os.writeObject(new Message(1, Session.instance));
-                    os.flush();
-                    os.reset();
+                v.setEnabled(false);
+                bo.setText("AMEND ORDER");
+                Session.getSession().sendRequest(new Request(3, Session.getSession().getTempOrder()));
+                Session.getSession().setOrder();
 
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                OrderListAdapter.getOrderListAdapter().update();
+                OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
             }
-        });
 
+
+        });
         return v;  }
 
 }

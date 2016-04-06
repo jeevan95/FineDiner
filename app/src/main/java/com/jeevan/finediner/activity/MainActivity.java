@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.jeevan.finediner.Item;
 import com.jeevan.finediner.R;
+import com.jeevan.finediner.Request;
 import com.jeevan.finediner.Session;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Toolbar toolbar;
     private Button btnSimpleTabs;
+    private Button btnConnect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +31,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         btnSimpleTabs = (Button) findViewById(R.id.btnSimpleTabs);
-        setupMenu();
-        Session o = new Session(2);
         btnSimpleTabs.setOnClickListener(this);
+        btnConnect = (Button) findViewById(R.id.btnConn);
+        btnConnect.setOnClickListener(this);
+        btnSimpleTabs.setEnabled(false);
 
     }
-    void setupMenu(){
-        ArrayList<Item> menuItems = new ArrayList<Item>();
-        menuItems.add(new Item("Sambar","bestaa",12.2));
-        menuItems.add(new Item("Aviyal", "muttua", 12.2));
-        menuItems.add(new Item("Pulisery","adipoli",12.2));
-        menuItems.add(new Item("Uppery", "pinne prathyekam parayano", 12.2));
-        Session.menuItems = menuItems;
 
-    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -49,7 +45,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent in = new Intent(MainActivity.this, OrderActivity.class);
                 startActivity(in);
                 break;
+            case R.id.btnConn:
+                Session.getSession(2);
+                new Listen().start();
+                view.setEnabled(false);
+                btnSimpleTabs.setEnabled(true);
 
+        }
+    }
+    public class Listen extends Thread {
+        public void run(){
+            while(true){
+                Request req = Session.getSession().receive();
+                if (req.type==1){
+                    Session.getSession().setMenu((ArrayList < Item >) req.o);
+                }
+            }
         }
     }
 }

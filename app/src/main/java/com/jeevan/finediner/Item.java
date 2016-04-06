@@ -7,18 +7,29 @@ import java.io.Serializable;
  */
 public class Item implements Serializable {
 
-    public String name;
-    public String desc;
-    public double price;
-    Boolean isVegan;
-    Boolean hasNuts;
-    int quantity;
+    private String name;
+    private String desc;
+    private double price;
+    private int quantity =1;
+    public Item(Item i ){
+        name = i.name;
+        desc = i.desc;
+        price = i.price;
+        quantity = i.quantity;
 
+    }
     public Item(String n, String ds, double pr) {
         this.name = n;
         this.desc = ds;
         this.price = pr;
     }
+    public void setQuantity(int q){
+        quantity = q;
+    }
+    public String getName(){return name;}
+    public String getDesc(){return desc;}
+    public double getPrice(){return price;}
+    public int getQuantity(){return quantity;}
 
 }
 

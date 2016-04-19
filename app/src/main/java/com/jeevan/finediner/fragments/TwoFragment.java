@@ -1,20 +1,21 @@
 package com.jeevan.finediner.fragments;
 
-import com.jeevan.finediner.Item;
-import com.jeevan.finediner.Request;
-import com.jeevan.finediner.R;
-import com.jeevan.finediner.activity.OrderListAdapter;
-import com.jeevan.finediner.Session;
-
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.jeevan.finediner.R;
+import com.jeevan.finediner.Request;
+import com.jeevan.finediner.Session;
+import com.jeevan.finediner.activity.OrderListAdapter;
 
 public class TwoFragment extends Fragment{
 
@@ -36,17 +37,26 @@ public class TwoFragment extends Fragment{
         ExpandableListView exl = (ExpandableListView) v.findViewById(R.id.menu_list);
         exl.setAdapter(new OrderListAdapter(getActivity()));
         final Button bo = (Button) v.findViewById(R.id.btnOrder);
+        final ProgressBar sk = (ProgressBar) v.findViewById(R.id.seekBar);
 
         if(Session.getSession().getTempOrder().isEmpty()){
             bo.setEnabled(false);
         }
+        if(!Session.getSession().getPlacedOrder().isEmpty()){
+            sk.setVisibility(View.INVISIBLE);
+        }
+        else {
+            sk.setVisibility(View.VISIBLE);
+
+        }
+
 
         bo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 v.setEnabled(false);
-                bo.setText("AMEND ORDER");
-                Session.getSession().sendRequest(new Request(3, Session.getSession().getTempOrder()));
-                Session.getSession().setOrder();
+                Session.getSession().sendRequest(new Request(Request.NEW_ORDER, Session.getSession().getTempOrder()));
+                sk.setVisibility(View.VISIBLE);
+                Session.getSession().setOrder(sk);
 
                 OrderListAdapter.getOrderListAdapter().update();
                 OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
@@ -54,6 +64,7 @@ public class TwoFragment extends Fragment{
 
 
         });
+
         return v;  }
 
 }

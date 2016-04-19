@@ -26,7 +26,15 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 
     private static MenuListAdapter expAdpMenu;
 
+    public void update(ArrayList<Item> i)
+    {
+        this.item_list = i;
+        notifyDataSetChanged();
 
+    }
+    public ArrayList<Item> getList(){
+        return item_list;
+    }
     public MenuListAdapter(Activity context, ArrayList<Item> menuItems) {
         this.context = context;
         this.item_list = menuItems;
@@ -91,7 +99,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 
                 OrderListAdapter.getOrderListAdapter().update();
                 OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
-                total.setText("Total = £" + String.valueOf(Session.getSession().getOrder().getTotal()));
+                total.setText("Total = £" + String.valueOf(Session.getSession().getTotal()));
 
             }
         });

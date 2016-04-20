@@ -2,39 +2,34 @@ package com.jeevan.finediner.fragments;
 
 import com.jeevan.finediner.R;
 import com.jeevan.finediner.activity.MenuListAdapter;
-import com.jeevan.finediner.activity.OrderListAdapter;
 import com.jeevan.finediner.Item;
 import com.jeevan.finediner.Session;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 
-public class OneFragment extends Fragment {
+public class MenuTab extends Fragment {
     ExpandableListView exl;
     Button btFilter;
     Button btSort;
-    final ArrayList<String> mSelectedItems = new ArrayList();  // Where we track the selected items
+
+
     ArrayList<Item> filtrdmenu = new ArrayList<>();
 
-    public OneFragment() {
+    public MenuTab() {
         // Required empty public constructor
     }
 
@@ -47,12 +42,14 @@ public class OneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_one, container, false);
+        View v = inflater.inflate(R.layout.menu_tab, container, false);
         // Inflate the layout for this fragment
         exl = (ExpandableListView) v.findViewById(R.id.expandableListView);
         btFilter = (Button) v.findViewById(R.id.btFilter);
+        final TextView label = (TextView) v.findViewById(R.id.textView4);
+        label.setText("MAIN COURSES");
 
-        setupMenu(Item.STARTER);
+        setupMenu(Item.MAIN);
         btSort = (Button) v.findViewById(R.id.btSort);
 
         Button btStrt = (Button) v.findViewById(R.id.imageButton2);
@@ -60,35 +57,52 @@ public class OneFragment extends Fragment {
         Button btSide = (Button) v.findViewById(R.id.imageButton4);
         Button btDess = (Button) v.findViewById(R.id.imageButton5);
         Button btDrnk = (Button) v.findViewById(R.id.imageButton6);
+        Button btDeal = (Button) v.findViewById(R.id.button4);
 
         btStrt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                label.setText("STARTER");
+
                 setupMenu(Item.STARTER);
             }
         });
         btMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                label.setText("MAIN COURSES");
+
                 setupMenu(Item.MAIN);
             }
         });
         btSide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                label.setText("SIDE");
+
                 setupMenu(Item.SIDE);
             }
         });
         btDess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                label.setText("DESSERTS");
                 setupMenu(Item.DESSERT);
             }
         });
         btDrnk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                label.setText("DRINKS");
+
                 setupMenu(Item.DRINK);
+            }
+        });
+        btDeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                label.setText("DEALS");
+                setupMenu(Item.DEAL);
             }
         });
 
@@ -97,7 +111,7 @@ public class OneFragment extends Fragment {
             public void onClick(View v) {
                 final String myList[] = { "Name", "Price" };
                  AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("ksjdf")
+                builder.setTitle("Sort by")
                         .setItems(myList, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // The 'which' argument contains the index position
@@ -125,10 +139,10 @@ public class OneFragment extends Fragment {
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
+                final ArrayList<String> mSelectedItems = new ArrayList<>();
                 final String myList[] = { "Vegan", "Nuts free", "Dairy free" };
                 // Set the dialog title
-                builder.setTitle("sddd")
+                builder.setTitle("Filter by")
                         // Specify the list array, the items to be selected by default (null for none),
                         // and the listener through which to receive callbacks when items are selected
                         .setMultiChoiceItems(myList, null,
@@ -151,14 +165,10 @@ public class OneFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User clicked OK, so save the mSelectedItems results somewhere
                                 // or return them to the component that opened the dialog
-                                filter();
+                                if(!mSelectedItems.isEmpty()){
+                                    filter(mSelectedItems);
 
-                            }
-                        })
-
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
+                                }
 
                             }
                         });
@@ -168,14 +178,13 @@ public class OneFragment extends Fragment {
 
         return v;
     }
-    private void filter(){
+    private void filter(ArrayList<String> list){
         ArrayList<Item> aii = new ArrayList<>();
         for (Item i:filtrdmenu) {
-            if(i.hasProperty(mSelectedItems)){
+            if(i.hasProperty(list)){
                 aii.add(i);
             }
         }
-        mSelectedItems.clear();
         MenuListAdapter.getMenuListAdapter().update(aii);
     }
     private void setupMenu(int cat){

@@ -57,7 +57,9 @@
         android:id="@+id/button"
         android:layout_below="@+id/item_name"
         android:layout_toRightOf="@+id/item_name"
-        android:layout_toEndOf="@+id/item_name" />
+        android:layout_toEndOf="@+id/item_name"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentLeft="true" />
 
 
 </RelativeLayout>

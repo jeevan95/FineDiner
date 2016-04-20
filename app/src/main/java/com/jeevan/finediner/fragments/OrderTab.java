@@ -1,7 +1,6 @@
 package com.jeevan.finediner.fragments;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jeevan.finediner.R;
@@ -17,9 +15,10 @@ import com.jeevan.finediner.Request;
 import com.jeevan.finediner.Session;
 import com.jeevan.finediner.activity.OrderListAdapter;
 
-public class TwoFragment extends Fragment{
+public class OrderTab extends Fragment{
 
-    public TwoFragment() {
+    TextView total;
+    public OrderTab() {
         // Required empty public constructor
     }
 
@@ -32,32 +31,38 @@ public class TwoFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_two, container, false);
+        View v = inflater.inflate(R.layout.order_tab, container, false);
         // Inflate the layout for this fragment
         ExpandableListView exl = (ExpandableListView) v.findViewById(R.id.menu_list);
         exl.setAdapter(new OrderListAdapter(getActivity()));
         final Button bo = (Button) v.findViewById(R.id.btnOrder);
-        final ProgressBar sk = (ProgressBar) v.findViewById(R.id.seekBar);
+        Session.getSession().time = (TextView) v.findViewById(R.id.time);
+        final TextView ntotal = (TextView) v.findViewById(R.id.newTotal);
+        final TextView ntime = (TextView) v.findViewById(R.id.newTime);
 
+        Session.getSession().time.setText("");
+        total  = (TextView) v.findViewById(R.id.total);
+
+        total.setText("Total = £" + Session.getSession().getFormattedDouble(Session.getSession().getTotal()));
+
+        Session.getSession().srk = (ProgressBar)v.findViewById(R.id.seekBar);
+        Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE,""));
         if(Session.getSession().getTempOrder().isEmpty()){
             bo.setEnabled(false);
         }
-        if(!Session.getSession().getPlacedOrder().isEmpty()){
-            sk.setVisibility(View.INVISIBLE);
-        }
-        else {
-            sk.setVisibility(View.VISIBLE);
 
-        }
 
 
         bo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 v.setEnabled(false);
                 Session.getSession().sendRequest(new Request(Request.NEW_ORDER, Session.getSession().getTempOrder()));
-                sk.setVisibility(View.VISIBLE);
-                Session.getSession().setOrder(sk);
+                Session.getSession().setOrder();
+                total.setText("Total = £" + Session.getSession().getFormattedDouble(Session.getSession().getTotal()));
+                ntime.setText("");
+                ntotal.setText("");
 
+                Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE, ""));
                 OrderListAdapter.getOrderListAdapter().update();
                 OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
             }

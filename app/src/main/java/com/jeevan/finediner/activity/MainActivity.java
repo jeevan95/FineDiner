@@ -81,17 +81,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     public class Listen extends Thread {
+
         public void run(){
             while(true){
                 final Request rr = (Request)  Session.getSession().receive();
                 switch (rr.getType()) {
-                    case Request.KITCHEN_CONNECT:
+                    case Request.PROGRESS_UPDATE:
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(Session.getSession().getTimer()!=null) {
-                                    Session.getSession().changeProgress(Long.valueOf( (int) rr.getContent()));
+                                if(Session.getSession().srk !=null){
+                                    Session.getSession().changeProgress(Long.valueOf( (int) rr.getContent()),Long.valueOf( (int) rr.getSecondContent()));
+                                    Toast.makeText(getApplicationContext(), ""+(int)rr.getContent()+" "+(int)rr.getSecondContent()+ " ",Toast.LENGTH_SHORT).show();
                                 }
+
                             }
                         });
                         break;

@@ -1,8 +1,8 @@
 package com.jeevan.finediner.activity;
 
 import com.jeevan.finediner.R;
-import com.jeevan.finediner.fragments.OneFragment;
-import com.jeevan.finediner.fragments.TwoFragment;
+import com.jeevan.finediner.fragments.MenuTab;
+import com.jeevan.finediner.fragments.OrderTab;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -25,7 +25,7 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_tabs);
+        setContentView(R.layout.activity_browser);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -38,9 +38,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        Fragment of = new OneFragment();
-        adapter.addFragment(of, "ONE");
-        adapter.addFragment(new TwoFragment(), "TWO");
+        adapter.addFragment( new MenuTab(), "MENU");
+        adapter.addFragment(new OrderTab(), "ORDER");
         viewPager.setAdapter(adapter);
     }
 

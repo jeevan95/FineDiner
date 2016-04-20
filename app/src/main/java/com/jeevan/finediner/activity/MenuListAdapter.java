@@ -68,39 +68,46 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
         TextView item = (TextView) convertView.findViewById(R.id.item_name);
 
         final EditText eq = (EditText) convertView.findViewById(R.id.quan);
+
         eq.setText(String.valueOf(selected.getQuantity()));
         ImageButton plus = (ImageButton) convertView.findViewById(R.id.btnPlus);
         plus.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                selected.setQuantity(selected.getQuantity() + 1);
-                eq.setText(String.valueOf(selected.getQuantity()));
-
+                int t = selected.getQuantity();
+                selected.setQuantity(t + 1);
+                eq.setText(""+(t+1));
             }
         });
         ImageButton minus = (ImageButton) convertView.findViewById(R.id.btnMinus);
         minus.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                int qa =  selected.getQuantity();
-                if (qa != 1) {
-                    selected.setQuantity(qa- 1);
-                    eq.setText(String.valueOf(qa -1));
-                }
+                int t = selected.getQuantity();
+                 if (t != 1) {
+                     selected.setQuantity(t -1);
+                     eq.setText("" + (t - 1));
+
+                 }
             }
         });
         Button add = (Button) convertView.findViewById(R.id.btnAddItem);
-        final TextView total = (TextView) context.findViewById(R.id.total);
+        final TextView total = (TextView) context.findViewById(R.id.newTotal);
+        final TextView time = (TextView) context.findViewById(R.id.newTime);
+        time.setText("");
+        total.setText("");
         final Button bo = (Button) context.findViewById(R.id.btnOrder);
 
         add.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
                 bo.setEnabled(true);
+                selected.setQuantity(Integer.parseInt("" + eq.getText()));
                 Session.getSession().addItemtoOrder(new Item(selected));
+
 
                 OrderListAdapter.getOrderListAdapter().update();
                 OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
-                total.setText("Total = £" + String.valueOf(Session.getSession().getTotal()));
-
+                time.setText("New Estimated Time " + Session.getSession().compareTimeNewOrder() / 1000 + "s");
+                total.setText("New Total = £" + Session.getSession().getFormattedDouble(Session.getSession().getNewTotal()));
             }
         });
 
@@ -134,7 +141,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
                     null);
         }
 
-        TextView item = (TextView) convertView.findViewById(R.id.item_name);
+       TextView item = (TextView) convertView.findViewById(R.id.item_name);
         TextView itempr = (TextView) convertView.findViewById(R.id.item_price);
         item.setTypeface(null, Typeface.BOLD);
         item.setText(i.getName());

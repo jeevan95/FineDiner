@@ -34,7 +34,7 @@ public class OrderListAdapter extends BaseExpandableListAdapter {
     }
     public void update(){
         ArrayList<Item> i = new ArrayList<>();
-         i.addAll(Session.getSession().getPlacedOrder());
+        i.addAll(Session.getSession().getPlacedOrder());
         i.addAll(Session.getSession().getTempOrder());
         item_list = i;
     }
@@ -63,18 +63,39 @@ public class OrderListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.order_child, null);
         }
+        ImageButton delete = (ImageButton) convertView.findViewById(R.id.imageButton);
+        if(Session.getSession().getPlacedOrder().contains(selected)){
+            delete.setEnabled(false);
+        }
 
         TextView item = (TextView) convertView.findViewById(R.id.item_nae);
-        ImageButton delete = (ImageButton) convertView.findViewById(R.id.imageButton);
-        final TextView total = (TextView) context.findViewById(R.id.total);
+        final TextView total = (TextView) context.findViewById(R.id.newTotal);
+        final TextView time = (TextView) context.findViewById(R.id.newTime);
+
+        final Button bo = (Button) context.findViewById(R.id.btnOrder);
+
+
+
 
         delete.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
+
                 Session.getSession().removeItemOrder(groupPosition);
                 update();
                 notifyDataSetChanged();
-           //     total.setText("Total = £" + String.valueOf(Session.getSession().getTotal()));
+                if(Session.getSession().getTempOrder().isEmpty()){
+                    bo.setEnabled(false);
+                    time.setText("");
+                    total.setText("");
+
+                }
+                else{
+                    time.setText("New Estimated Time " + Session.getSession().compareTimeNewOrder() / 1000 + "s");
+                    total.setText("New Total = £" + Session.getSession().getFormattedDouble(Session.getSession().getNewTotal()));
+
+                }
+
             }
         });
 
@@ -108,8 +129,7 @@ public class OrderListAdapter extends BaseExpandableListAdapter {
                     null);
         }
         if(Session.getSession().getPlacedOrder().contains(i)){
-            convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
-
+            convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         }
         TextView item = (TextView) convertView.findViewById(R.id.item_name);
         TextView itempr = (TextView) convertView.findViewById(R.id.item_price);

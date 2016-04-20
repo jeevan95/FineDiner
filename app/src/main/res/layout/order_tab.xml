@@ -2,27 +2,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jeevan.finediner.fragments.OneFragment"
+    tools:context=".fragments.MenuTab"
     android:padding="2dp"
     android:id="@+id/vv">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="180dp"
         android:id="@+id/linearLayout3">
 
 
-
         <ExpandableListView
             android:id="@+id/menu_list"
             android:layout_width="match_parent"
-            android:layout_height="441dp"
-            />
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,8 +55,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/total"
         android:layout_alignEnd="@+id/total"
-        android:max="100"
-        android:progress="0"
         android:layout_above="@+id/total" />
 
 
@@ -63,13 +62,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Total"
-        android:id="@+id/textView2"
+        android:text="Time"
+        android:id="@+id/time"
         android:layout_alignBottom="@+id/total"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Total"
+        android:id="@+id/newTotal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_above="@+id/seekBar" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Time"
+        android:id="@+id/newTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/seekBar" />
 
 
 </RelativeLayout>

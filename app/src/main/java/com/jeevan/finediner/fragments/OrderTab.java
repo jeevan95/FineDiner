@@ -1,6 +1,7 @@
 package com.jeevan.finediner.fragments;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,10 +47,11 @@ public class OrderTab extends Fragment{
         total.setText("Total = £" + Session.getSession().getFormattedDouble(Session.getSession().getTotal()));
 
         Session.getSession().srk = (ProgressBar)v.findViewById(R.id.seekBar);
-        Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE,""));
+
         if(Session.getSession().getTempOrder().isEmpty()){
             bo.setEnabled(false);
         }
+        final Button btRefresh = (Button) v.findViewById(R.id.btnRefresh);
 
 
 
@@ -62,9 +64,27 @@ public class OrderTab extends Fragment{
                 ntime.setText("");
                 ntotal.setText("");
 
-                Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE, ""));
+                Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE_CUSTOMER));
                 OrderListAdapter.getOrderListAdapter().update();
                 OrderListAdapter.getOrderListAdapter().notifyDataSetChanged();
+            }
+
+
+        });
+        btRefresh.setOnClickListener(new View.OnClickListener() {
+            public void onClick(final View v) {
+                v.setEnabled(false);
+                CountDownTimer t = new CountDownTimer(5000, 5000) {
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    public void onFinish() {
+                        v.setEnabled(true);
+
+                    }
+                }.start();
+                Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE_CUSTOMER));
+                Session.getSession().sendRequest(new Request(Request.PROGRESS_UPDATE_CUSTOMER));
+
             }
 
 

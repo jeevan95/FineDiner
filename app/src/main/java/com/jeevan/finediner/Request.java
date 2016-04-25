@@ -8,9 +8,14 @@ public class Request implements Serializable {
             NEW_WAITER = 2,
             KITCHEN_CONNECT = 3,
             NEW_ORDER = 4,
-            PROGRESS_UPDATE = 5
-
-
+            PROGRESS_UPDATE_WAITER = 5,
+            PROGRESS_UPDATE_CUSTOMER = 6,
+            CREATE_TABLE =7,
+            TABLE_LIST=8,
+            ERROR_MESSAGE = 9,
+            MENU = 10,
+            INITIALIZE_WAITER = 11,
+            CUSTOMER_INFO = 12
 
                     ;
 
@@ -22,6 +27,10 @@ public class Request implements Serializable {
     public Request(int type, Object o){
         this.type = type;
         this.content = o;
+    }
+
+    public Request(int type){
+        this.type = type;
     }
     public Object getContent(){
         return content;

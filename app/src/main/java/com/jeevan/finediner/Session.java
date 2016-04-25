@@ -51,12 +51,12 @@ public class Session implements Serializable{
                 setMenu((ArrayList<Item>) req.getContent());
                 tempOrder = new ArrayList<>();
                 placedOrder = new ArrayList<>();
-
+                req = receive();
+                placedOrder = (ArrayList<Item>) req.getContent();
                 instance = this;
                 Toast.makeText(a,"sd",Toast.LENGTH_SHORT).show();
             }
-            req = receive();
-            placedOrder = (ArrayList<Item>) req.getContent();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,6 +103,9 @@ public class Session implements Serializable{
             }
         }
         tempOrder.add(it);
+    }
+    public String getTableCode(){
+        return tablecode;
     }
     public void removeItemOrder(int it) {
         it = it - placedOrder.size();

@@ -65,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     setViewAndChildrenEnabled(layy,true);
                     new Listen().start();
                 }
-
-
-
         }
     }
     private  void setViewAndChildrenEnabled(View view, boolean enabled) {
@@ -80,13 +77,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-    public class Listen extends Thread {
 
+    public class Listen extends Thread {
         public void run(){
             while(true){
                 final Request rr = (Request)  Session.getSession().receive();
                 switch (rr.getType()) {
-                    case Request.PROGRESS_UPDATE:
+                    case Request.PROGRESS_UPDATE_CUSTOMER:
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -94,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Session.getSession().changeProgress(Long.valueOf( (int) rr.getContent()),Long.valueOf( (int) rr.getSecondContent()));
                                     Toast.makeText(getApplicationContext(), ""+(int)rr.getContent()+" "+(int)rr.getSecondContent()+ " ",Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                         });
                         break;
